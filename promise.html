@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Promise</title>
+</head>
+<body>
+    <script>
+        //Step 1: we mimic posts arr to be hypothetical data from a server
+        const posts = [
+            {title: "Post One", body: "This is post One"},
+            {title: "Post Two", body: "This is post Two"}
+        ];
+        //Step 2: fetching data from the server and append them to the DOM
+        function getPosts(){
+            setTimeout(()=>{
+                let output = "";
+                posts.forEach((post, index)=>{
+                    output += `<li>${post.title}</li>`;
+                   // console.log("error occurred!");
+                })
+                    document.body.innerHTML = output;
+            }, 1000);
+        }
+        //Step3: This function was supposed to run after the first async. fxn but the dom already
+        //As a result I make it to be a callback invoking getPosts fxn when it is called
+        function createPost(post){
+            return new Promise((resolve, reject)=>{
+                setTimeout(()=>{
+                posts.push(post);
+                const error = true;
+                if(!error){
+                    resolve();
+                } else{
+                    reject("Error: Something went wrong");
+                }
+            }, 2000)
+            })
+        }
+        createPost({title: "Post Three", body: "This post Three"})
+        .then(getPosts)
+        .catch(err => console.log(err));
+    </script>
+</body>
+</html>
